@@ -4,16 +4,16 @@ using TMPro;
 using VRC.SDKBase;
 using VRC.Udon;
 
-public class TextSerializer : UdonSharpBehaviour
+public class FetchContestants : UdonSharpBehaviour
 {
     [SerializeField] private TextMeshProUGUI[] textObjects;
     [SerializeField] private TextMeshPro newTMProText;
 
-    private string[] serializedTextArray;
+    private string[] Contestants;
 
     private void Start()
     {
-        serializedTextArray = new string[textObjects.Length];
+        Contestants = new string[textObjects.Length];
     }
 
     public override void OnDeserialization()
@@ -22,7 +22,7 @@ public class TextSerializer : UdonSharpBehaviour
         {
             if (textObjects[i] != null)
             {
-                serializedTextArray[i] = textObjects[i].text;
+                Contestants[i] = textObjects[i].text;
             }
         }
     }
@@ -33,17 +33,17 @@ public class TextSerializer : UdonSharpBehaviour
 
         for (int i = 0; i < textObjects.Length; i++)
         {
-            if (textObjects[i] != null && textObjects[i].text != serializedTextArray[i])
+            if (textObjects[i] != null && textObjects[i].text != Contestants[i])
             {
-                serializedTextArray[i] = textObjects[i].text;
-                Debug.Log("Text #" + (i + 1) + " changed to: " + serializedTextArray[i]);
+                Contestants[i] = textObjects[i].text;
+                Debug.Log("Text #" + (i + 1) + " changed to: " + Contestants[i]);
                 textChanged = true;
             }
         }
 
         if (textChanged && newTMProText != null)
         {
-            newTMProText.text = string.Join("\n", serializedTextArray);
+            newTMProText.text = string.Join("\n", Contestants);
         }
     }
 }
