@@ -6,21 +6,24 @@ using VRC.Udon;
 
 public class FetchWinner : UdonSharpBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] textObjects;
-    [SerializeField] private TextMeshPro[] newTMProTextArray;
+    [SerializeField] private TextMeshProUGUI[] WinDetection;
+    [SerializeField] private TextMeshPro[] Round2;
+    [SerializeField] private TextMeshPro[] Round3;
+    [SerializeField] private TextMeshPro[] Round4;
+    [SerializeField] private TextMeshPro[] Winner;
 
     private void Update()
     {
-        for (int i = 0; i < textObjects.Length; i++)
+        for (int i = 0; i < WinDetection.Length; i++)
         {
-            if (textObjects[i] != null)
+            if (WinDetection[i] != null)
             {
-                string currentText = textObjects[i].text;
+                string currentText = WinDetection[i].text;
                 string winnerName = GetPlayerName(currentText);
 
-                if (newTMProTextArray[i] != null && winnerName != newTMProTextArray[i].text)
+                if (Round2[i] != null && winnerName != Round2[i].text)
                 {
-                    newTMProTextArray[i].text = winnerName;
+                    Round2[i].text = winnerName;
                     Debug.Log("Text #" + (i + 1) + " changed to: " + winnerName);
                 }
             }
