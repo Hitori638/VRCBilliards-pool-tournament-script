@@ -9,7 +9,7 @@ public class FetchContestants : UdonSharpBehaviour
     [SerializeField] private TextMeshProUGUI[] textObjects;
     [SerializeField] private TextMeshPro newTMProText;
 
-    private string[] Contestants;
+    public string[] Contestants;
 
     private void Start()
     {
@@ -20,7 +20,7 @@ public class FetchContestants : UdonSharpBehaviour
     {
         for (int i = 0; i < textObjects.Length; i++)
         {
-            if (textObjects[i] != null)
+            if (textObjects[i] != null && !string.IsNullOrEmpty(textObjects[i].text))
             {
                 Contestants[i] = textObjects[i].text;
             }
@@ -33,7 +33,7 @@ public class FetchContestants : UdonSharpBehaviour
 
         for (int i = 0; i < textObjects.Length; i++)
         {
-            if (textObjects[i] != null && textObjects[i].text != Contestants[i])
+            if (textObjects[i] != null && textObjects[i].text != Contestants[i] && !string.IsNullOrEmpty(textObjects[i].text))
             {
                 Contestants[i] = textObjects[i].text;
                 Debug.Log("Text #" + (i + 1) + " changed to: " + Contestants[i]);
@@ -45,5 +45,11 @@ public class FetchContestants : UdonSharpBehaviour
         {
             newTMProText.text = string.Join("\n", Contestants);
         }
+    }
+
+    public void ClearContestants()
+    {
+        Contestants = new string[textObjects.Length];
+        Debug.Log("Contestants array cleared.");
     }
 }
