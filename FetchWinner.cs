@@ -7,54 +7,36 @@ using VRC.Udon;
 public class FetchWinner : UdonSharpBehaviour
 {
     [SerializeField] private TextMeshProUGUI[] textObjects;
-    [SerializeField] private TextMeshPro newTMProText;
+    [SerializeField] private TextMeshPro[] newTMProTextArray;
 
-    private string[] Winners;
-
-
-private void Start()
-{
-    Winners = new string[textObjects.Length];
-}
-
-
-private void Update()
-{
-    bool textChanged = false;
-
-    for (int i = 0; i < textObjects.Length; i++)
+    private void Update()
     {
-        if (textObjects[i] != null)
+        for (int i = 0; i < textObjects.Length; i++)
         {
-            string currentText = textObjects[i].text;
-            string winnerName = GetPlayerName(currentText);
-            
-            if (winnerName != Winners[i])
+            if (textObjects[i] != null)
             {
-                Winners[i] = winnerName;
-                Debug.Log("Text #" + (i + 1) + " changed to: " + Winners[i]);
-                textChanged = true;
+                string currentText = textObjects[i].text;
+                string winnerName = GetPlayerName(currentText);
+
+                if (newTMProTextArray[i] != null && winnerName != newTMProTextArray[i].text)
+                {
+                    newTMProTextArray[i].text = winnerName;
+                    Debug.Log("Text #" + (i + 1) + " changed to: " + winnerName);
+                }
             }
         }
     }
 
-    if (textChanged && newTMProText != null)
+    private string GetPlayerName(string fullText)
     {
-        newTMProText.text = string.Join("\n", Winners);
+        int suffixIndex = fullText.LastIndexOf(" wins!");
+        if (suffixIndex >= 0)
+        {
+            return fullText.Substring(0, suffixIndex);
+        }
+        else
+        {
+            return fullText; // If the suffix is not found, return the full text.
+        }
     }
-}
-
-private string GetPlayerName(string fullText)
-{
-    int suffixIndex = fullText.LastIndexOf(" wins!");
-    if (suffixIndex >= 0)
-    {
-        return fullText.Substring(0, suffixIndex);
-    }
-    else
-    {
-        return fullText; // If the suffix is not found, return the full text.
-    }
-}
-
 }

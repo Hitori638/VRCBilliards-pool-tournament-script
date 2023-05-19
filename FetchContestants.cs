@@ -7,7 +7,7 @@ using VRC.Udon;
 public class FetchContestants : UdonSharpBehaviour
 {
     [SerializeField] private TextMeshProUGUI[] textObjects;
-    [SerializeField] private TextMeshPro newTMProText;
+    [SerializeField] public TextMeshPro[] newTMProTextArray; // Changed the variable to an array
 
     public string[] Contestants;
 
@@ -41,9 +41,12 @@ public class FetchContestants : UdonSharpBehaviour
             }
         }
 
-        if (textChanged && newTMProText != null)
+        if (textChanged && newTMProTextArray != null && newTMProTextArray.Length == Contestants.Length) // Added array length check
         {
-            newTMProText.text = string.Join("\n", Contestants);
+            for (int i = 0; i < Contestants.Length; i++) // Loop through Contestants array
+            {
+                newTMProTextArray[i].text = Contestants[i]; // Assign contestant names to corresponding newTMProText objects
+            }
         }
     }
 
