@@ -3,56 +3,90 @@ using UnityEngine;
 using TMPro;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 public class FetchContestants : UdonSharpBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] ContestantDetection;
+    [SerializeField] public TextMeshProUGUI[] ContestantDetection;
     [SerializeField] public TextMeshPro[] Round1; // Changed the variable to an array
 
-    public string[] Contestants;
+    public bool playerPoolFull = false; // Flag to track if player pool is full
 
-    private void Start()
-    {
-        Contestants = new string[ContestantDetection.Length];
+    
+    public override void Interact(){
+        if (Networking.IsMaster){
+        SendCustomNetworkEvent(NetworkEventTarget.All, "GamemodeSelect");
+    }
     }
 
-    public override void OnDeserialization()
-    {
-        for (int i = 0; i < ContestantDetection.Length; i++)
+
+    public void GamemodeSelect(){
+        if (playerPoolFull)
         {
-            if (ContestantDetection[i] != null && !string.IsNullOrEmpty(ContestantDetection[i].text))
-            {
-                Contestants[i] = ContestantDetection[i].text;
-            }
+            // Player pool is already full, no need to check further
+            return;
         }
-    }
 
-    private void Update()
-    {
         bool textChanged = false;
 
         for (int i = 0; i < ContestantDetection.Length; i++)
         {
-            if (ContestantDetection[i] != null && ContestantDetection[i].text != Contestants[i] && !string.IsNullOrEmpty(ContestantDetection[i].text))
+            Debug.Log("Loop iteration: " + i);
+            if (ContestantDetection[i] != null && ContestantDetection[i].text != Round1[i].text && !string.IsNullOrEmpty(ContestantDetection[i].text))
             {
-                Contestants[i] = ContestantDetection[i].text;
-                Debug.Log("Text #" + (i + 1) + " changed to: " + Contestants[i]);
-                textChanged = true;
+                if (!IsPlayerInRound1(ContestantDetection[i].text))
+                {
+                    Round1[i].text = ContestantDetection[i].text;
+                    Debug.Log("Text #" + (i + 1) + " changed to: " + Round1[i].text);
+                    textChanged = true;
+
+                    if (IsPlayerPoolFull())
+                    {
+                        // Player pool is full, stop searching for more players
+                        playerPoolFull = true;
+                        break;
+                    }
+                }
             }
         }
 
-        if (textChanged && Round1 != null && Round1.Length == Contestants.Length) // Added array length check
+        if (textChanged)
         {
-            for (int i = 0; i < Contestants.Length; i++) // Loop through Contestants array
+            Debug.Log("Round1 updated.");
+        }
+    }
+
+    private bool IsPlayerInRound1(string playerName)
+    {
+        for (int i = 0; i < Round1.Length; i++)
+        {
+            if (Round1[i] != null && Round1[i].text == playerName)
             {
-                Round1[i].text = Contestants[i]; // Assign contestant names to corresponding newTMProText objects
+                return true; // Player already exists in Round1
             }
         }
+        return false; // Player does not exist in Round1
+    }
+
+    private bool IsPlayerPoolFull()
+    {
+        foreach (var player in Round1)
+        {
+            if (string.IsNullOrEmpty(player.text))
+            {
+                return false; // Player pool is not full
+            }
+        }
+        return true; // Player pool is full
     }
 
     public void ClearContestants()
     {
-        Contestants = new string[ContestantDetection.Length];
-        Debug.Log("Contestants array cleared.");
+        for (int i = 0; i < Round1.Length; i++)
+        {
+            Round1[i].text = ""; // Clear Round1 text
+        }
+        playerPoolFull = false; // Reset player pool full flag
+        Debug.Log("Round1 cleared.");
     }
 }
