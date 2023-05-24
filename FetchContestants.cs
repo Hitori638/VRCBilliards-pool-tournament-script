@@ -109,12 +109,19 @@ public class FetchContestants : UdonSharpBehaviour
 
 private void CopyRound1ToRound2()
 {
-    for (int i = 0; i < Eights.Length; i++)
+    int eightsIndex = 0;
+
+    for (int i = 0; i < Round1.Length; i++)
     {
-        Eights[i].text = Round1[i].text;
-        Round1[i].text = ""; // Clear the Round1 entry
+        if (!string.IsNullOrEmpty(Round1[i].text))
+        {
+            Eights[eightsIndex].text = Round1[i].text;
+            Round1[i].text = ""; // Clear the Round1 entry
+            eightsIndex++;
+        }
     }
 }
+
 
 
     private bool IsPlayerInRound1(string playerName)

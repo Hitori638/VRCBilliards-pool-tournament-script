@@ -13,7 +13,7 @@ public class FetchWinner : UdonSharpBehaviour
     [SerializeField] public TextMeshPro[] Round4;
     [SerializeField] public TextMeshPro Winner;
     [SerializeField] private int tableid;
-    [SerializeField] private int gamemode;
+   
 
     private bool FirstUpdate = false;
 
@@ -25,6 +25,8 @@ public class FetchWinner : UdonSharpBehaviour
         Round4Logic();
         Round3Logic();
         Round2Logic();
+        TournamentConcluded();
+        
     }
 
     public void Round2Logic()
@@ -176,6 +178,13 @@ public class FetchWinner : UdonSharpBehaviour
                     }
                 }
             }
+    }
+
+    public void TournamentConcluded(){
+        if (!string.IsNullOrEmpty(Winner.text)){
+        FirstUpdate = false;
+
+        }
     }
 
     public string GetPlayerName(string fullText)
