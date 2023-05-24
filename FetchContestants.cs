@@ -90,7 +90,7 @@ public class FetchContestants : UdonSharpBehaviour
     }
     else if (count < 8)
     {
-        return "Not enough players. You need at least " + (8 - count) + " players more.";
+        return "Not enough players. You need at least " + (8 - count) + " more players.";
     }
     else if (count > 16)
     {

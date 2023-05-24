@@ -59,6 +59,7 @@ public class FetchWinner : UdonSharpBehaviour
             if (!isAlreadyInRound2 && winnerName != Round2[tableid].text)
             {
                 Round2[tableid].text = winnerName;
+                WinDetection.text="";
                 FirstUpdate = true;
             }
         }
@@ -98,6 +99,7 @@ public class FetchWinner : UdonSharpBehaviour
                             {
                                 
                                 Round3[j / 2].text = Round2[j].text;
+                                Tables[i].text= "";
                             }
                         }
                         else
@@ -106,6 +108,7 @@ public class FetchWinner : UdonSharpBehaviour
                             if (!string.IsNullOrEmpty(Round2[j].text) && !string.IsNullOrEmpty(Round2[j -1].text))
                             {
                                 Round3[j / 2].text = Round2[j].text;
+                                Tables[i].text= "";
                             }
                         }
 
@@ -133,6 +136,7 @@ public class FetchWinner : UdonSharpBehaviour
                             if (!string.IsNullOrEmpty(Round3[j].text) && !string.IsNullOrEmpty(Round3[j + 1].text))
                             {
                                 Round4[j / 2].text = Round3[j].text;
+                                Tables[i].text= "";
                             }
                         }
                         else
@@ -140,6 +144,7 @@ public class FetchWinner : UdonSharpBehaviour
                             if (!string.IsNullOrEmpty(Round3[j].text) && !string.IsNullOrEmpty(Round3[j - 1].text))
                             {
                                 Round4[j / 2].text = Round3[j].text;
+                                Tables[i].text= "";
                             }
                         }
 
@@ -164,6 +169,7 @@ public class FetchWinner : UdonSharpBehaviour
                             if (!string.IsNullOrEmpty(Round4[j].text) && !string.IsNullOrEmpty(Round4[j + 1].text))
                             {
                                 Winner.text = Round4[j].text;
+                                Tables[i].text= "";
                             }
                         }
                         else
@@ -171,6 +177,7 @@ public class FetchWinner : UdonSharpBehaviour
                             if (!string.IsNullOrEmpty(Round4[j].text) && !string.IsNullOrEmpty(Round4[j - 1].text))
                             {
                                Winner.text = Round4[j].text;
+                               Tables[i].text= "";
                             }
                         }
 
