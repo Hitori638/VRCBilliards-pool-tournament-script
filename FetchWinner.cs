@@ -13,6 +13,7 @@ public class FetchWinner : UdonSharpBehaviour
     [SerializeField] public TextMeshPro[] Round4;
     [SerializeField] public TextMeshPro Winner;
     [SerializeField] private int tableid;
+    [SerializeField] private int gamemode;
 
     private bool FirstUpdate = false;
 
@@ -27,24 +28,57 @@ public class FetchWinner : UdonSharpBehaviour
     }
 
     public void Round2Logic()
+{
+    if (!FirstUpdate)
     {
-       
-        if(!FirstUpdate){
-            if (WinDetection.text != null)
-            {
-                string currentText = WinDetection.text;
-                string winnerName = GetPlayerName(currentText);
+        bool eightplayers = EightplayerGamemode();
+        if (eightplayers)
+        {
+            FirstUpdate = true;
+            Debug.Log("detected 8playermode");
+        }
 
-                if (Round2[tableid] != null && winnerName != Round2[tableid].text)
+        if (!FirstUpdate && WinDetection.text != null)
+        {
+            string currentText = WinDetection.text;
+            string winnerName = GetPlayerName(currentText);
+
+            bool isAlreadyInRound2 = false;
+            
+            for (int i = 0; i < Round2.Length; i++)
+            {
+                if (Round2[i].text == winnerName)
                 {
-                    Round2[tableid].text = winnerName;
-                    FirstUpdate= true;
-                    
+                    isAlreadyInRound2 = true;
+                    break;
                 }
+            }
+
+            if (!isAlreadyInRound2 && winnerName != Round2[tableid].text)
+            {
+                Round2[tableid].text = winnerName;
+                FirstUpdate = true;
             }
         }
     }
+}
 
+
+    public bool EightplayerGamemode(){
+        int count = 0;
+        for (int i=0;i<8;i++){
+            if (!string.IsNullOrEmpty(Round2[i].text))
+            count++;
+        
+
+        }
+        if (count==8){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public void Round3Logic()
     {
        
@@ -54,16 +88,20 @@ public class FetchWinner : UdonSharpBehaviour
                 {
                     if (GetPlayerName(Tables[i].text) == Round2[j].text)
                     {
+
                         if (j % 2 == 0)
-                        {
+                        {   
+                           
                             if (!string.IsNullOrEmpty(Round2[j].text) && !string.IsNullOrEmpty(Round2[j + 1].text))
                             {
+                                
                                 Round3[j / 2].text = Round2[j].text;
                             }
                         }
                         else
                         {
-                            if (!string.IsNullOrEmpty(Round2[j].text) && !string.IsNullOrEmpty(Round2[j - 1].text))
+                            
+                            if (!string.IsNullOrEmpty(Round2[j].text) && !string.IsNullOrEmpty(Round2[j -1].text))
                             {
                                 Round3[j / 2].text = Round2[j].text;
                             }
