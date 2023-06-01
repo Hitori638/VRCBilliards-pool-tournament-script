@@ -8,6 +8,7 @@ public class FetchWinner : UdonSharpBehaviour
 {
     [SerializeField] public TextMeshProUGUI[] Tables;
     [SerializeField] public TextMeshProUGUI WinDetection;
+    [SerializeField] public TextMeshPro[] Round1;
     [SerializeField] public TextMeshPro[] Round2;
     [SerializeField] public TextMeshPro[] Round3;
     [SerializeField] public TextMeshPro[] Round4;
@@ -34,11 +35,18 @@ public class FetchWinner : UdonSharpBehaviour
     if (!FirstUpdate)
     {
         bool eightplayers = EightplayerGamemode();
+        bool sixteenplayers = SixteenplayerGamemode();
         if (eightplayers)
         {
             FirstUpdate = true;
             Debug.Log("detected 8playermode");
+            
         }
+        
+        else if (sixteenplayers){
+
+            Debug.Log("detected 16playermode");
+        
 
         if (!FirstUpdate && WinDetection.text != null)
         {
@@ -65,6 +73,7 @@ public class FetchWinner : UdonSharpBehaviour
         }
     }
 }
+}
 
 
     public bool EightplayerGamemode(){
@@ -76,6 +85,23 @@ public class FetchWinner : UdonSharpBehaviour
 
         }
         if (count==8){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
+    public bool SixteenplayerGamemode(){
+        int count = 0;
+        for (int i=0;i<16;i++){
+            if (!string.IsNullOrEmpty(Round1[i].text))
+            count++;
+        
+
+        }
+        if (count==16){
             return true;
         }
         else{
